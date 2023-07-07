@@ -12,8 +12,8 @@ export default class App extends Component {
   render() {
     return (
       <>
-      <Searchbar onSubmit={this.handleFormSubmit}/>
-      <ImageGallery query={this.state.query}/>
+        <Searchbar onSubmit={this.handleFormSubmit} />
+        <ImageGallery query={this.state.query} />
       </>
     );
   }
