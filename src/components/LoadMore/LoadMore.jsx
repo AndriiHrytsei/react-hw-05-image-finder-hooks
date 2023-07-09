@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styles from './LoadMore.module.css';
 
-const LoadMore = ({ increamentFunct }) => {
-  return (
-    <button className={styles.Button} type="button" onClick={increamentFunct}>
-      Load more
-    </button>
-  );
-};
+export default class LoadMore extends Component {
+  state = {
+    photosPerPage: 20
+  }
+  onClick = () => {
+    this.setState({
+      photosPerPage: this.state.photosPerPage + 20,
+    })
+    this.props.perPage(this.state.photosPerPage)
+  }
 
-export default LoadMore;
+  render() {
+    return (
+      <button className={styles.Button} type="button" onClick={this.onClick}>
+        Load more
+      </button>
+    )
+  }
+}

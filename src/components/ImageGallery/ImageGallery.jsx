@@ -9,11 +9,12 @@ export default class ImageGallery extends Component {
     photos: [],
     error: null,
     status: 'idle',
-    photosPerPage: 20,
+    photosPerPage: 0,
   };
-  handleIncreament = () => {
-    this.setState({ photosPerPage: this.state.photosPerPage + 20 });
+  handleIncreament = loadMoreData => {
+    this.setState({ photosPerPage: loadMoreData });
   };
+
   componentDidUpdate = prevProps => {
     if (prevProps.query !== this.props.query) {
       this.setState({ status: 'pending', photosPerPage: 20, isVisible: false });
@@ -78,7 +79,9 @@ export default class ImageGallery extends Component {
                     />
                   ))}
               </ul>
-              {photos.length > 20 && <LoadMore increamentFunct={this.handleIncreament}/>}
+              {photos.length > 20 && (
+                <LoadMore perPage={this.handleIncreament} />
+              )}
             </>
           ) : (
             <p>Nothing here...</p>
