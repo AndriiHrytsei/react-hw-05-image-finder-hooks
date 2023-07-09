@@ -8,12 +8,16 @@ export default class ImageGallery extends Component {
     photos: [],
     error: null,
     status: 'idle',
+    photosPerPage: 20,
   };
+  handleIncreament = () => {
+    this.setState({ photosPerPage: this.state.photosPerPage + 20 })
+  }
   componentDidUpdate = prevProps => {
     if (prevProps.query !== this.props.query) {
       this.setState({ status: 'pending' });
       fetch(
-        `https://pixabay.com/api/?q=${this.props.query}&page=1&key=35594812-0318ae570b601c4a3427f19fb&image_type=photo&orientation=horizontal&per_page=20`
+        `https://pixabay.com/api/?q=${this.props.query}&page=1&key=35594812-0318ae570b601c4a3427f19fb&image_type=photo&orientation=horizontal&per_page=200`
       )
         .then(response => {
           if (response.ok) {
@@ -34,7 +38,7 @@ export default class ImageGallery extends Component {
     }
   };
   render() {
-    const { photos, error, status } = this.state;
+    const { photos, error, status, photosPerPage } = this.state;
     if (status === 'pending') {
       return (
         <ThreeDots
@@ -49,22 +53,29 @@ export default class ImageGallery extends Component {
         />
       );
     }
-    
+
     if (status === 'rejected') {
       return <p>{error}</p>;
     }
 
     if (status === 'resolved') {
       return (
+        <>
         <ul className={styles.ImageGallery}>
-          {photos.map(photo => (
-            <ImageGalleryItem
-              key={photo.id}
-              imageLink={photo.webformatURL}
-              imageTags={photo.tags}
-            />
-          ))}
+          {photos.length > 0 ? (
+            photos.slice(0, photosPerPage).map(({ id, webformatURL, tags }) => (
+              <ImageGalleryItem
+                key={id}
+                imageLink={webformatURL}
+                imageTags={tags}
+              />
+            ))
+          ) : (
+            <p>Nothing here...</p>
+          )}
         </ul>
+        <button className={styles.Button} type="button" onClick={this.handleIncreament}>Load more</button>
+        </>
       );
     }
   }
