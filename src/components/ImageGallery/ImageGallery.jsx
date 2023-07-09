@@ -11,11 +11,11 @@ export default class ImageGallery extends Component {
     photosPerPage: 20,
   };
   handleIncreament = () => {
-    this.setState({ photosPerPage: this.state.photosPerPage + 20 })
-  }
+    this.setState({ photosPerPage: this.state.photosPerPage + 20 });
+  };
   componentDidUpdate = prevProps => {
     if (prevProps.query !== this.props.query) {
-      this.setState({ status: 'pending', photosPerPage: 20 });
+      this.setState({ status: 'pending', photosPerPage: 20, isVisible: false });
       fetch(
         `https://pixabay.com/api/?q=${this.props.query}&page=1&key=35594812-0318ae570b601c4a3427f19fb&image_type=photo&orientation=horizontal&per_page=200`
       )
@@ -33,7 +33,10 @@ export default class ImageGallery extends Component {
           });
         })
         .catch(error =>
-          this.setState({ error: error.message, status: 'rejected' })
+          this.setState({
+            error: error.message,
+            status: 'rejected',
+          })
         );
     }
   };
@@ -61,20 +64,30 @@ export default class ImageGallery extends Component {
     if (status === 'resolved') {
       return (
         <>
-        <ul className={styles.ImageGallery}>
           {photos.length > 0 ? (
-            photos.slice(0, photosPerPage).map(({ id, webformatURL, tags }) => (
-              <ImageGalleryItem
-                key={id}
-                imageLink={webformatURL}
-                imageTags={tags}
-              />
-            ))
+            <>
+              <ul className={styles.ImageGallery}>
+                {photos
+                  .slice(0, photosPerPage)
+                  .map(({ id, webformatURL, tags }) => (
+                    <ImageGalleryItem
+                      key={id}
+                      imageLink={webformatURL}
+                      imageTags={tags}
+                    />
+                  ))}
+              </ul>
+              {photos.length > 20 && <button
+                className={styles.Button}
+                type="button"
+                onClick={this.handleIncreament}
+              >
+                Load more
+              </button>}
+            </>
           ) : (
             <p>Nothing here...</p>
           )}
-        </ul>
-        <button className={styles.Button} type="button" onClick={this.handleIncreament}>Load more</button>
         </>
       );
     }
