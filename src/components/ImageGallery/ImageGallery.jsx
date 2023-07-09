@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import { ThreeDots } from 'react-loader-spinner';
 import styles from './ImageGallery.module.css';
+import LoadMore from 'components/LoadMore/LoadMore';
 
 export default class ImageGallery extends Component {
   state = {
@@ -77,13 +78,7 @@ export default class ImageGallery extends Component {
                     />
                   ))}
               </ul>
-              {photos.length > 20 && <button
-                className={styles.Button}
-                type="button"
-                onClick={this.handleIncreament}
-              >
-                Load more
-              </button>}
+              {photos.length > 20 && <LoadMore increamentFunct={this.handleIncreament}/>}
             </>
           ) : (
             <p>Nothing here...</p>
