@@ -15,7 +15,7 @@ export default class ImageGallery extends Component {
   }
   componentDidUpdate = prevProps => {
     if (prevProps.query !== this.props.query) {
-      this.setState({ status: 'pending' });
+      this.setState({ status: 'pending', photosPerPage: 20 });
       fetch(
         `https://pixabay.com/api/?q=${this.props.query}&page=1&key=35594812-0318ae570b601c4a3427f19fb&image_type=photo&orientation=horizontal&per_page=200`
       )
