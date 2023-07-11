@@ -10,6 +10,7 @@ export default class App extends Component {
   handleFormSubmit = query => {
     this.setState({ query });
   };
+
   render() {
     return (
       <div className={styles.App}>

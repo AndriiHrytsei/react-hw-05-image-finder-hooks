@@ -9,43 +9,54 @@ export default class ImageGallery extends Component {
     photos: [],
     error: null,
     status: 'idle',
-    photosPerPage: 0,
-  };
-  handleIncreament = () => {
-    this.setState({
-      photosPerPage: this.state.photosPerPage + 20,
-    })
+    page: 1,
   };
 
-  componentDidUpdate = prevProps => {
-    if (prevProps.query !== this.props.query) {
-      this.setState({ status: 'pending', photosPerPage: 20 });
-      fetch(
-        `https://pixabay.com/api/?q=${this.props.query}&page=1&key=35594812-0318ae570b601c4a3427f19fb&image_type=photo&orientation=horizontal&per_page=200`
-      )
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
-          return Promise.reject(new Error('Images not found'));
-        })
-        .then(photos => {
-          this.setState({
-            photos: photos.hits,
+  
+  loadUsers = () => {
+    this.setState({ status: 'pending' });
+    fetch(
+      `https://pixabay.com/api/?q=${this.props.query}&key=35594812-0318ae570b601c4a3427f19fb&image_type=photo&orientation=horizontal&per_page=20&page=${this.state.page}`
+    )
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        return Promise.reject(new Error('Images not found'));
+      })
+      .then(photos => {
+        this.setState(prevState => {
+          return {
+            photos: [...prevState.photos, ...photos.hits],
             status: 'resolved',
             error: false,
-          });
+          };
+        });
+      })
+      .catch(error =>
+        this.setState({
+          error: error.message,
+          status: 'rejected',
         })
-        .catch(error =>
-          this.setState({
-            error: error.message,
-            status: 'rejected',
-          })
-        );
+      );
+  };
+
+  handleLoadMore = () => {
+    this.setState({
+      page: this.state.page + 1,
+    });
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      prevProps.query !== this.props.query ||
+      prevState.page !== this.state.page
+    ) {
+      this.loadUsers();
     }
   };
   render() {
-    const { photos, error, status, photosPerPage } = this.state;
+    const { photos, error, status } = this.state;
     if (status === 'pending') {
       return (
         <ThreeDots
@@ -71,18 +82,17 @@ export default class ImageGallery extends Component {
           {photos.length > 0 ? (
             <>
               <ul className={styles.ImageGallery}>
-                {photos
-                  .slice(0, photosPerPage)
-                  .map(({ id, webformatURL, tags }) => (
-                    <ImageGalleryItem
-                      key={id}
-                      imageLink={webformatURL}
-                      imageTags={tags}
-                    />
-                  ))}
+                {photos.map(({ id, webformatURL, tags, largeImageURL }) => (
+                  <ImageGalleryItem
+                    key={id}
+                    imageLink={webformatURL}
+                    imageTags={tags}
+                    bigImageLink={largeImageURL}
+                  />
+                ))}
               </ul>
-              {photos.length > 20 && (
-                <LoadMore inreamentFunc={this.handleIncreament} />
+              {photos.length >= 20 && (
+                <LoadMore inreamentFunc={this.handleLoadMore} />
               )}
             </>
           ) : (

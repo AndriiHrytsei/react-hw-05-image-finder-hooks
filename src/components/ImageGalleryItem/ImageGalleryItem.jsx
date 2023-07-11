@@ -1,11 +1,48 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { Component } from 'react';
 import styles from './ImageGalleryItem.module.css';
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Modal from 'components/Modal/Modal';
+import { isVisible } from '@testing-library/user-event/dist/utils';
 
-const ImageGalleryItem = ({ imageLink, imageTags }) => (
-  <li className={styles.ImageGalleryItem}>
-    <LazyLoadImage src={imageLink} alt={imageTags} className={styles.ImageGalleryItemImage}/>
-  </li>
-);
+export default class ImageGalleryItem extends Component {
+  state = {
+    isVisible: false,
+  };
 
-export default ImageGalleryItem;
+  componentDidMount = () => {
+    window.addEventListener('keypress', this.handleCloseModal)
+  }
+
+componentWillUnmount = () => {
+  window.removeEventListener('keypress', this.handleCloseModal)
+}
+
+  handleOpenModal = () => {
+    this.setState({ isVisible: true });
+  };
+
+  handleCloseModal = (e) => {
+    if (e.key === "Enter"){
+      this.setState({ isVisible: false });
+    }
+  };
+
+  render() {
+    const { imageLink, imageTags, bigImageLink } = this.props;
+    const { isVisible } = this.state
+    return (
+      <>
+        <li className={styles.ImageGalleryItem}>
+          <LazyLoadImage
+            src={imageLink}
+            alt={imageTags}
+            className={styles.ImageGalleryItemImage}
+            onClick={this.handleOpenModal}
+          />
+        </li>
+        {isVisible && <Modal imgSrc = {bigImageLink} imgTag={imageTags}/>}
+      </>
+    );
+  }
+}
