@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import { ThreeDots } from 'react-loader-spinner';
 import styles from './ImageGallery.module.css';
@@ -99,4 +100,8 @@ export default class ImageGallery extends Component {
       );
     }
   }
+}
+
+ImageGallery.propTypes = {
+  query: PropTypes.string.isRequired
 }
