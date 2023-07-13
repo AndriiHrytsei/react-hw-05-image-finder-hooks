@@ -11,11 +11,11 @@ export default class ImageGalleryItem extends Component {
   };
 
   componentDidMount = () => {
-    window.addEventListener('keypress', this.handleCloseModal);
+    window.addEventListener('click', this.handleCloseModal);
   };
 
   componentWillUnmount = () => {
-    window.removeEventListener('keypress', this.handleCloseModal);
+    window.removeEventListener('click', this.handleCloseModal);
   };
 
   handleOpenModal = () => {
@@ -23,7 +23,7 @@ export default class ImageGalleryItem extends Component {
   };
 
   handleCloseModal = e => {
-    if (e.key === 'Enter') {
+    if (e.target.dataset.name === 'backdrop') {
       this.setState({ isVisible: false });
     }
   };
