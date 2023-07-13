@@ -9,14 +9,13 @@ export default class ImageGallery extends Component {
     photos: [],
     error: null,
     status: 'idle',
-    page: 1,
+    perPage: 0,
   };
 
-  
-  loadUsers = () => {
-    this.setState({ status: 'pending' });
+  loadPhotos = () => {
+    this.setState({ status: 'pending', perPage: 12 });
     fetch(
-      `https://pixabay.com/api/?q=${this.props.query}&key=35594812-0318ae570b601c4a3427f19fb&image_type=photo&orientation=horizontal&per_page=20&page=${this.state.page}`
+      `https://pixabay.com/api/?q=${this.props.query}&key=35594812-0318ae570b601c4a3427f19fb&image_type=photo&orientation=horizontal&per_page=200`
     )
       .then(response => {
         if (response.ok) {
@@ -25,12 +24,10 @@ export default class ImageGallery extends Component {
         return Promise.reject(new Error('Images not found'));
       })
       .then(photos => {
-        this.setState(prevState => {
-          return {
-            photos: [...prevState.photos, ...photos.hits],
-            status: 'resolved',
-            error: false,
-          };
+        this.setState({
+          photos: [...photos.hits],
+          status: 'resolved',
+          error: false,
         });
       })
       .catch(error =>
@@ -43,20 +40,18 @@ export default class ImageGallery extends Component {
 
   handleLoadMore = () => {
     this.setState({
-      page: this.state.page + 1,
+      perPage: this.state.perPage + 12,
     });
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (
-      prevProps.query !== this.props.query ||
-      prevState.page !== this.state.page
-    ) {
-      this.loadUsers();
+  componentDidUpdate = prevProps => {
+    if (prevProps.query !== this.props.query) {
+      this.loadPhotos();
     }
   };
+
   render() {
-    const { photos, error, status } = this.state;
+    const { photos, error, status, perPage } = this.state;
     if (status === 'pending') {
       return (
         <ThreeDots
@@ -82,16 +77,18 @@ export default class ImageGallery extends Component {
           {photos.length > 0 ? (
             <>
               <ul className={styles.ImageGallery}>
-                {photos.map(({ id, webformatURL, tags, largeImageURL }) => (
-                  <ImageGalleryItem
-                    key={id}
-                    imageLink={webformatURL}
-                    imageTags={tags}
-                    bigImageLink={largeImageURL}
-                  />
-                ))}
+                {photos
+                  .slice(0, perPage)
+                  .map(({ id, webformatURL, tags, largeImageURL }) => (
+                    <ImageGalleryItem
+                      key={id}
+                      imageLink={webformatURL}
+                      imageTags={tags}
+                      bigImageLink={largeImageURL}
+                    />
+                  ))}
               </ul>
-              {photos.length >= 20 && (
+              {photos.length >= 12 && (
                 <LoadMore inreamentFunc={this.handleLoadMore} />
               )}
             </>

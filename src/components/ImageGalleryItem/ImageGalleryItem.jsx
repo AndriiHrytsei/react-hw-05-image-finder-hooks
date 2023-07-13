@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import styles from './ImageGalleryItem.module.css';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Modal from 'components/Modal/Modal';
-import { isVisible } from '@testing-library/user-event/dist/utils';
 
 export default class ImageGalleryItem extends Component {
   state = {
@@ -11,26 +10,26 @@ export default class ImageGalleryItem extends Component {
   };
 
   componentDidMount = () => {
-    window.addEventListener('keypress', this.handleCloseModal)
-  }
+    window.addEventListener('keypress', this.handleCloseModal);
+  };
 
-componentWillUnmount = () => {
-  window.removeEventListener('keypress', this.handleCloseModal)
-}
+  componentWillUnmount = () => {
+    window.removeEventListener('keypress', this.handleCloseModal);
+  };
 
   handleOpenModal = () => {
     this.setState({ isVisible: true });
   };
 
-  handleCloseModal = (e) => {
-    if (e.key === "Enter"){
+  handleCloseModal = e => {
+    if (e.key === 'Enter') {
       this.setState({ isVisible: false });
     }
   };
 
   render() {
     const { imageLink, imageTags, bigImageLink } = this.props;
-    const { isVisible } = this.state
+    const { isVisible } = this.state;
     return (
       <>
         <li className={styles.ImageGalleryItem}>
@@ -41,7 +40,7 @@ componentWillUnmount = () => {
             onClick={this.handleOpenModal}
           />
         </li>
-        {isVisible && <Modal imgSrc = {bigImageLink} imgTag={imageTags}/>}
+        {isVisible && <Modal imgSrc={bigImageLink} imgTag={imageTags} />}
       </>
     );
   }
