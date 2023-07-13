@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import styles from './ImageGalleryItem.module.css';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Modal from 'components/Modal/Modal';
+import PropTypes from 'prop-types';
 
 export default class ImageGalleryItem extends Component {
   state = {
@@ -44,4 +45,10 @@ export default class ImageGalleryItem extends Component {
       </>
     );
   }
+}
+
+ImageGalleryItem.propTypes = {
+  imageLink: PropTypes.string.isRequired,
+  imageTags: PropTypes.string,
+  bigImageLink: PropTypes.string.isRequired
 }

@@ -13,7 +13,6 @@ export default class Searchbar extends Component {
   };
   handleSubmit = e => {
     e.preventDefault();
-
     if (this.state.query.trim() === '') {
       return;
     }
@@ -44,5 +43,5 @@ export default class Searchbar extends Component {
 }
 
 Searchbar.propTypes = {
-  onSubmit: PropTypes.func.isRequired
-}
+  onSubmit: PropTypes.func.isRequired,
+};
