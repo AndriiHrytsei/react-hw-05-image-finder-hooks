@@ -10,20 +10,24 @@ export default function ImageGalleryItem({
   bigImageLink,
 }) {
   const [visible, setVisible] = useState(false);
-  const handleOpenModal = () => {
-    setVisible(true);
-  };
-  const handleCloseModal = e => {
-    if (e.target.dataset.name === 'backdrop') {
-      setVisible(false);
-    }
-  };
+
   useEffect(() => {
     window.addEventListener('click', handleCloseModal);
     return () => {
       window.removeEventListener('click', handleCloseModal);
     };
   }, []);
+
+  const handleOpenModal = () => {
+    setVisible(true);
+  };
+
+  const handleCloseModal = e => {
+    if (e.target.dataset.name === 'backdrop') {
+      setVisible(false);
+    }
+  };
+
   return (
     <>
       <li className={styles.ImageGalleryItem}>
