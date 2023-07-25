@@ -11,11 +11,11 @@ export default function ImageGallery({ query }) {
   const [status, setStatus] = useState('idle');
   const [perPage, setPerPage] = useState(0);
 
-  const loadPhotos = q => {
+  const loadPhotos = queryVal => {
     setStatus('pending');
     setPerPage(12);
     fetch(
-      `https://pixabay.com/api/?q=${q}&key=35594812-0318ae570b601c4a3427f19fb&image_type=photo&orientation=horizontal&per_page=200`
+      `https://pixabay.com/api/?q=${queryVal}&key=35594812-0318ae570b601c4a3427f19fb&image_type=photo&orientation=horizontal&per_page=200`
     )
       .then(response => {
         if (response.ok) {
