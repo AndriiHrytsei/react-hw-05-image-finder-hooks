@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import { ThreeDots } from 'react-loader-spinner';
 import styles from './ImageGallery.module.css';
-import LoadMore from 'components/LoadMore/LoadMore';
+import LoadMore from '../LoadMore/LoadMore';
 
 export default function ImageGallery({ query }) {
   const [photos, setPhotos] = useState([]);

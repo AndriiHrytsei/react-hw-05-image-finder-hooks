@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './ImageGalleryItem.module.css';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import Modal from 'components/Modal/Modal';
+import Modal from '../Modal/Modal';
 import PropTypes from 'prop-types';
 
 export default function ImageGalleryItem({
